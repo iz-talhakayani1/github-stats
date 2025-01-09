@@ -1,27 +1,26 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const issueSchema = new mongoose.Schema({
-  id: { type: Number },
+const issueSchema = new Schema({
+  id: { type: Number, required: true, unique: true }, // GitHub Issue ID
+  number: { type: Number, required: true },
   title: { type: String },
-  body: { type: String },
-  state: { type: String, enum: ['open', 'closed'] },
+  state: { type: String },
+  user: {
+    login: { type: String },
+    id: { type: Number },
+  },
+  labels: [
+    {
+      id: { type: Number },
+      name: { type: String },
+      color: { type: String },
+    },
+  ],
   created_at: { type: Date },
   updated_at: { type: Date },
   closed_at: { type: Date },
-  user: {
-    login: String,
-    id: Number,
-    avatar_url: String,
-  },
-  assignees: [
-    {
-      login: String,
-      id: Number,
-      avatar_url: String,
-    },
-  ],
-  html_url: { type: String },
-  repo_id: { type: Number }, // Reference to the repository
+  repositoryId: { type: Number, ref: 'Repository', required: true }, // Reference to Repository ID
 });
 
 module.exports = mongoose.model('Issue', issueSchema);

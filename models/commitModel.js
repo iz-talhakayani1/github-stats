@@ -1,20 +1,21 @@
 const mongoose = require('mongoose');
+const { Schema } = mongoose;
 
-const commitSchema = new mongoose.Schema({
-  sha: { type: String },
+const commitSchema = new Schema({
+  sha: { type: String, required: true, unique: true }, // Commit SHA
   message: { type: String },
   author: {
-    name: String,
-    email: String,
-    date: Date,
+    name: { type: String },
+    email: { type: String },
+    date: { type: Date },
   },
   committer: {
-    name: String,
-    email: String,
-    date: Date,
+    name: { type: String },
+    email: { type: String },
+    date: { type: Date },
   },
-  html_url: { type: String },
-  repo_id: { type: Number }, // Reference to the repository
+  url: { type: String },
+  repositoryId: { type: Number, ref: 'Repository', required: true }, // Reference to Repository ID
 });
 
 module.exports = mongoose.model('Commit', commitSchema);
